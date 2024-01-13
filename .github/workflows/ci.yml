@@ -1,0 +1,55 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '*'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mix_test:
+    name: mix test
+    runs-on: ubuntu-20.04
+
+    env:
+      MIX_ENV: test
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install OTP and Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: '24.1'
+          elixir-version: '1.15'
+
+      - name: Cache deps folder
+        uses: actions/cache@v3
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          restore-keys: |
+            ${{ runner.os }}-mix-
+
+      - name: Cache _build folder
+        uses: actions/cache@v3
+        with:
+          path: _build
+          key: ${{ runner.os }}-build-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - name: Install dependencies
+        run: mix deps.get
+
+      - run: mix hex.audit
+      - run: mix deps.unlock --check-unused
+      - run: mix format --check-formatted
+      - run: mix compile --warnings-as-errors
+
+      - name: Run tests
+        run: mix test --include integration

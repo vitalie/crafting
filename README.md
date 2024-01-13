@@ -1,5 +1,7 @@
 # Crafting
 
+- [![Actions Status](https://github.com/vitalie/crafting/workflows/CI/badge.svg)](https://github.com/vitalie/cradting/actions)
+
 To start your Phoenix server:
 
   * Run `mix setup` to install and setup dependencies
