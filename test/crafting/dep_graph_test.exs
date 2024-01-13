@@ -23,8 +23,14 @@ defmodule Crafting.DepGraphTest do
     end
 
     test "returns error when at least on cycle is detects" do
-      assert {:error, {:cycle, _}} = DepGraph.sort([{:t1, [:t2]}, {:t2, [:t1]}])
-      assert {:error, {:cycle, _}} = DepGraph.sort([{:t1, [:t2]}, {:t2, [:t3]}, {:t3, :t1}])
+      assert {:error, {:cycle, [:t1, :t2]}} = DepGraph.sort([{:t1, [:t2]}, {:t2, [:t1]}])
+
+      assert {:error, {:cycle, [:t1, :t2, :t3]}} =
+               DepGraph.sort([
+                 {:t1, [:t2]},
+                 {:t2, [:t3]},
+                 {:t3, :t1}
+               ])
     end
   end
 

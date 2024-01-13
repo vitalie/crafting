@@ -7,5 +7,9 @@ defmodule CraftingWeb.Router do
 
   scope "/api", CraftingWeb do
     pipe_through :api
+
+    scope "/tasks" do
+      resources "/schedule", TaskSchedulerController, only: [:create]
+    end
   end
 end

@@ -33,7 +33,7 @@ defmodule Crafting.DepGraph do
   def sort({[], tasks}, {n, acc}) do
     case split(tasks) do
       {[], _} ->
-        {:error, {:cycle, tasks}}
+        {:error, {:cycle, Enum.map(tasks, &elem(&1, 0))}}
 
       {nodeps, tasks} ->
         sort({nodeps, tasks}, {n, acc})

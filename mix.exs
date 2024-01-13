@@ -33,6 +33,8 @@ defmodule Crafting.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.7.2"},
+      {:phoenix_ecto, "~> 4.4"},
+      {:ecto_sql, "~> 3.6"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.20"},
